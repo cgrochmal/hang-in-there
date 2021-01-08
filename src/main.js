@@ -20,7 +20,7 @@ var images = [
   "./assets/squirrel.jpg",
   "./assets/tiger.jpg",
   "./assets/turtle.jpg"
-];
+]
 var titles = [
   "determination",
   "success",
@@ -57,7 +57,7 @@ var titles = [
   "trust",
   "understanding",
   "wisdom"
-];
+]
 var quotes = [
   "Don’t downgrade your dream just to fit your reality, upgrade your conviction to match your destiny.",
   "You are braver than you believe, stronger than you seem and smarter than you think.",
@@ -86,7 +86,7 @@ var quotes = [
   "It is never too late to be what you might have been.",
   "Happiness often sneaks in through a door you didn't know you left open.",
   "We must be willing to let go of the life we planned so as to have the life that is waiting for us.",
-  "Never limit yourself because of others’ limited imagination; never limit others because of your own limited imagination.",
+  "Never limit yourself because of others’ limited imagination never limit others because of your own limited imagination.",
   "Be the change that you wish to see in the world.",
   "Let us make our future now, and let us make our dreams tomorrow's reality.",
   "You don't always need a plan. Sometimes you just need to breathe, trust, let go, and see what happens.",
@@ -97,15 +97,79 @@ var quotes = [
   "No matter what people tell you, words and ideas can change the world.",
   "Each person must live their life as a model for others.",
   "A champion is defined not by their wins but by how they can recover when they fall."
-];
-var savedPosters = [];
-var currentPoster;
+]
+var savedPosters = []
+var currentPoster
+
+const sectionMainPoster = document.querySelector('.main-poster')
+const sectionCreatePoster = document.querySelector('.poster-form')
+const sectionSavedPosters = document.querySelector('.saved-posters')
 
 // event listeners go here 👇
+
+window.onload = function onLoad() {
+  renderRandomPoster()
+}
+
+/**
+ * Updates DOM with random poster image, title, and quote.
+ */
+function renderRandomPoster() {
+  const randomPoster = getRandomPoster()
+
+  const imgPoster = document.querySelector('.poster-img')
+  imgPoster.src = randomPoster.imageURL
+
+  const h1Title = document.querySelector('.poster-title')
+  h1Title.innerText = randomPoster.title
+
+  const h3Quote = document.querySelector('.poster-quote')
+  h3Quote.innerText = randomPoster.quote
+}
+
+/** 
+ * Hide poster form and saved posters, and show main poster.
+ */
+function showMainPoster() {
+  sectionCreatePoster.classList.add('hidden')
+  sectionSavedPosters.classList.add('hidden')
+  sectionMainPoster.classList.remove('hidden')
+}
+
+/** 
+ * Hide saved posters and main poster, and show poster form.
+ */
+function showPosterForm() {
+  sectionMainPoster.classList.add('hidden')
+  sectionSavedPosters.classList.add('hidden')
+  sectionCreatePoster.classList.remove('hidden')
+}
+
+/** 
+ * Hide poster form and main poster, and show saved posters.
+ */
+function showSavedPosters() {
+  sectionMainPoster.classList.add('hidden')
+  sectionCreatePoster.classList.add('hidden')
+  sectionSavedPosters.classList.remove('hidden')
+}
+
+
 
 // functions and event handlers go here 👇
 // (we've provided one for you to get you started)!
 function getRandomIndex(array) {
-  return Math.floor(Math.random() * array.length);
+  return Math.floor(Math.random() * array.length)
 }
 
+/**
+ * Generates a Poster with a random image, title, and quote from the data above.
+ * @returns {Poster}
+ */
+function getRandomPoster() {
+  const randomImageURL = images[getRandomIndex(images)]
+  const randomTitle = titles[getRandomIndex(titles)]
+  const randomQuote = quotes[getRandomIndex(quotes)]
+
+  return new Poster(randomImageURL, randomTitle, randomQuote)
+}
