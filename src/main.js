@@ -178,6 +178,18 @@ function submitPoster(e) {
   }
 }
 
+// POSTER GRID
+
+/**
+ * delete poster from UI and savedPosters using data-id
+ */
+function deletePoster(id) {
+  const posterElement = document.querySelector(`.mini-poster[data-id="${id}"]`)
+  posterElement.remove()
+  const deletedPosterIndex = savedPosters.find(poster => poster.id === id)
+  savedPosters.splice(deletedPosterIndex, 1)
+}
+
 // functions and event handlers go here 👇
 // (we've provided one for you to get you started)!
 
@@ -220,7 +232,7 @@ function isPosterAlreadySaved(poster) {
     return (
       existingPoster.imageURL === poster.imageURL &&
       existingPoster.quote === poster.quote &&
-      exixtingPoster.title === poster.title
+      existingPoster.title === poster.title
     )
   })
   // cast to boolean
@@ -257,6 +269,8 @@ function getMiniPosterElement(poster) {
   // create container
   const divMiniPoster = document.createElement('div')
   divMiniPoster.className = 'mini-poster'
+  divMiniPoster.dataset.id = poster.id
+  divMiniPoster.ondblclick = () => deletePoster(poster.id)
   
   // create and append children
   const h2PosterTitle = document.createElement('h2')
