@@ -112,6 +112,13 @@ window.onload = function onLoad() {
   renderRandomPoster()
 }
 
+// MAIN POSTER VIEW 
+
+/** Saves the current poster */
+function saveCurrentPoster() {
+  savePoster(currentPoster)
+}
+
 /**
  * Updates DOM with Poster with random title, quote, and image.
  */
@@ -119,9 +126,6 @@ function renderRandomPoster() {
   const randomPoster = getRandomPoster()
   renderMainPoster(randomPoster)
 }
-
-
-// NAVIGATION
 
 /** 
  * Hide poster form and saved posters, and show main poster.
@@ -200,10 +204,29 @@ function getRandomPoster() {
  * @param {Poster} poster 
  */
 function savePoster(poster) {
-  savedPosters.push(poster)
-  const divMiniPoster = getMiniPosterElement(poster)
-  articleSavedPostersGrid.append(divMiniPoster)
+  if (!isPosterAlreadySaved(poster)) {
+    savedPosters.push(poster)
+    const divMiniPoster = getMiniPosterElement(poster)
+    articleSavedPostersGrid.append(divMiniPoster)
+  }
 }
+
+/**
+ * @param {Poster} poster 
+ * @returns {boolean} whether poster exists in savedPosters
+ */
+function isPosterAlreadySaved(poster) {
+  const duplicatePoster = savedPosters.find(existingPoster => {
+    return (
+      existingPoster.imageURL === poster.imageURL &&
+      existingPoster.quote === poster.quote &&
+      exixtingPoster.title === poster.title
+    )
+  })
+  // cast to boolean
+  return !!duplicatePoster
+}
+
 
 // RENDER HELPERS
 
@@ -221,6 +244,7 @@ function renderMainPoster(poster) {
   const h3Quote = document.querySelector('.poster-quote')
   h3Quote.innerText = poster.quote
 
+  currentPoster = poster
   showMainPoster()
 }
 
