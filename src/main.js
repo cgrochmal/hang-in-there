@@ -86,7 +86,7 @@ var quotes = [
   "It is never too late to be what you might have been.",
   "Happiness often sneaks in through a door you didn't know you left open.",
   "We must be willing to let go of the life we planned so as to have the life that is waiting for us.",
-  "Never limit yourself because of others’ limited imagination never limit others because of your own limited imagination.",
+  "Never limit yourself because of others’ limited imagination; never limit others because of your own limited imagination.",
   "Be the change that you wish to see in the world.",
   "Let us make our future now, and let us make our dreams tomorrow's reality.",
   "You don't always need a plan. Sometimes you just need to breathe, trust, let go, and see what happens.",
@@ -186,7 +186,7 @@ function submitPoster(e) {
 function deletePoster(id) {
   const posterElement = document.querySelector(`.mini-poster[data-id="${id}"]`)
   posterElement.remove()
-  const deletedPosterIndex = savedPosters.find(poster => poster.id === id)
+  const deletedPosterIndex = savedPosters.findIndex(poster => poster.id === id)
   savedPosters.splice(deletedPosterIndex, 1)
 }
 
@@ -228,13 +228,11 @@ function savePoster(poster) {
  * @returns {boolean} whether poster exists in savedPosters
  */
 function isPosterAlreadySaved(poster) {
-  const duplicatePoster = savedPosters.find(existingPoster => {
-    return (
-      existingPoster.imageURL === poster.imageURL &&
-      existingPoster.quote === poster.quote &&
-      existingPoster.title === poster.title
-    )
-  })
+  const duplicatePoster = savedPosters.find(existingPoster => (
+    existingPoster.imageURL === poster.imageURL &&
+    existingPoster.quote === poster.quote &&
+    existingPoster.title === poster.title
+  ))
   // cast to boolean
   return !!duplicatePoster
 }
