@@ -104,28 +104,24 @@ var currentPoster
 const sectionMainPoster = document.querySelector('.main-poster')
 const sectionCreatePoster = document.querySelector('.poster-form')
 const sectionSavedPosters = document.querySelector('.saved-posters')
+const articleSavedPostersGrid = document.querySelector('.saved-posters-grid')
 
 // event listeners go here 👇
 
-window.onload = function onLoad() {
+window.onload = function onLoad() {  
   renderRandomPoster()
 }
 
 /**
- * Updates DOM with random poster image, title, and quote.
+ * Updates DOM with Poster with random title, quote, and image.
  */
 function renderRandomPoster() {
   const randomPoster = getRandomPoster()
-
-  const imgPoster = document.querySelector('.poster-img')
-  imgPoster.src = randomPoster.imageURL
-
-  const h1Title = document.querySelector('.poster-title')
-  h1Title.innerText = randomPoster.title
-
-  const h3Quote = document.querySelector('.poster-quote')
-  h3Quote.innerText = randomPoster.quote
+  renderMainPoster(randomPoster)
 }
+
+
+// NAVIGATION
 
 /** 
  * Hide poster form and saved posters, and show main poster.
@@ -154,10 +150,35 @@ function showSavedPosters() {
   sectionSavedPosters.classList.remove('hidden')
 }
 
+// CREATE POSTER FORM
 
+/**
+ * Save and render a poster if all fields are provided.
+ * @param {Event} e onsubmit event handler.
+ */
+function submitPoster(e) {
+  e.preventDefault()
+
+  const newPosterUrl = document.getElementById('poster-image-url').value
+  const newPosterTitle = document.getElementById('poster-title').value
+  const newPosterQuote = document.getElementById('poster-quote').value
+
+  // do nothing if all fields aren't filled out
+  if (newPosterUrl && newPosterTitle && newPosterQuote) {
+    const newPoster = new Poster(newPosterUrl, newPosterTitle, newPosterQuote)
+    // save and render new poster
+    savePoster(newPoster)
+    renderMainPoster(newPoster)
+    // reset form <input> values
+    document.querySelector('.poster-form form').reset()
+  }
+}
 
 // functions and event handlers go here 👇
 // (we've provided one for you to get you started)!
+
+// DATA HELPERS
+
 function getRandomIndex(array) {
   return Math.floor(Math.random() * array.length)
 }
@@ -172,4 +193,57 @@ function getRandomPoster() {
   const randomQuote = quotes[getRandomIndex(quotes)]
 
   return new Poster(randomImageURL, randomTitle, randomQuote)
+}
+
+/**
+ * Saves poster data and appends a new .mini-poster to the saved posters grid.
+ * @param {Poster} poster 
+ */
+function savePoster(poster) {
+  savedPosters.push(poster)
+  const divMiniPoster = getMiniPosterElement(poster)
+  articleSavedPostersGrid.append(divMiniPoster)
+}
+
+// RENDER HELPERS
+
+/**
+ * Updates DOM with provided Poster.
+ * @param {Poster} poster
+ */
+function renderMainPoster(poster) {
+  const imgPoster = document.querySelector('.poster-img')
+  imgPoster.src = poster.imageURL
+
+  const h1Title = document.querySelector('.poster-title')
+  h1Title.innerText = poster.title
+
+  const h3Quote = document.querySelector('.poster-quote')
+  h3Quote.innerText = poster.quote
+
+  showMainPoster()
+}
+
+/**
+ * Returns a .mini-poster DOM node for use in the saved posters grid.
+ * @param {Poster} poster 
+ * @returns {Element} <div class="min-poster"> + children
+ */
+function getMiniPosterElement(poster) {
+  // create container
+  const divMiniPoster = document.createElement('div')
+  divMiniPoster.className = 'mini-poster'
+  
+  // create and append children
+  const h2PosterTitle = document.createElement('h2')
+  h2PosterTitle.innerText = poster.title
+
+  const h4PosterText = document.createElement('h4')
+  h4PosterText.innerText = poster.quote
+
+  const imgContents = document.createElement('img')
+  imgContents.src = poster.imageURL
+  
+  divMiniPoster.append(imgContents, h2PosterTitle, h4PosterText)
+  return divMiniPoster;
 }
